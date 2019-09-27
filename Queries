@@ -1,0 +1,371 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| person             |
+| sakila             |
+| sys                |
++--------------------+
+6 rows in set (0.14 sec)
+
+
+
+
+mysql> use person;
+Database changed
+mysql> show tables;
++------------------+
+| Tables_in_person |
++------------------+
+| information      |
+| students         |
++------------------+
+2 rows in set (0.03 sec)
+
+mysql> select*from information;
++------------+--------+-------------+-----------+
+| customerID | name   | phonenumber | city      |
++------------+--------+-------------+-----------+
+|         11 | khushi |        8001 | Paris     |
+|         12 | Indu   |        8002 | Singapore |
++------------+--------+-------------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> select*from students;
++------------+--------+------+
+| customerID | sname  | phno |
++------------+--------+------+
+|         16 | Devina | 2009 |
+|         15 | ayea   | 2005 |
++------------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> insert into information(customedID, name, phonenumber, city)
+    -> values( '11','himan', '2445', 'tehri');
+ERROR 1054 (42S22): Unknown column 'customedID' in 'field list'
+mysql> insert into information( customedID , name, phonenumber, city)
+    -> values( '11','himan', '2445', 'tehri');
+ERROR 1054 (42S22): Unknown column 'customedID' in 'field list'
+mysql> insert into information(customerID, name, phonenumber, city)
+    -> values( '11','himan', '2445', 'tehri');
+Query OK, 1 row affected (0.20 sec)
+
+mysql> insert into information( customedID , name, phonenumber, city)
+    -> values( '11','hihjkhjman', '5675', 'rtyui');
+ERROR 1054 (42S22): Unknown column 'customedID' in 'field list'
+mysql> insert into information( customerID , name, phonenumber, city)
+    -> values( '11','hihjkhjman', '5675', 'rtyui');
+Query OK, 1 row affected (0.20 sec)
+
+
+
+
+
+
+
+
+mysql> select * from information;
++------------+------------+-------------+-----------+
+| customerID | name       | phonenumber | city      |
++------------+------------+-------------+-----------+
+|         11 | khushi     |        8001 | Paris     |
+|         12 | Indu       |        8002 | Singapore |
+|         11 | himan      |        2445 | tehri     |
+|         11 | hihjkhjman |        5675 | rtyui     |
++------------+------------+-------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> insert into information( customerID , name, phonenumber, city)
+    -> values( '16','hghhihjkhjman', '567995', 'rastyui');
+Query OK, 1 row affected (0.60 sec)
+
+mysql> select information.name, students.sname
+    -> from information
+    -> inner join students
+    -> on information.customerID=students.customerID;
++---------------+--------+
+| name          | sname  |
++---------------+--------+
+| hghhihjkhjman | Devina |
++---------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select*from information
+    -> where name in ('Indu', 'himan');
++------------+-------+-------------+-----------+
+| customerID | name  | phonenumber | city      |
++------------+-------+-------------+-----------+
+|         12 | Indu  |        8002 | Singapore |
+|         11 | himan |        2445 | tehri     |
++------------+-------+-------------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> select* from information'
+    '> select* from information;
+    '> ^C
+mysql> select*from information;
++------------+---------------+-------------+-----------+
+| customerID | name          | phonenumber | city      |
++------------+---------------+-------------+-----------+
+|         11 | khushi        |        8001 | Paris     |
+|         12 | Indu          |        8002 | Singapore |
+|         11 | himan         |        2445 | tehri     |
+|         11 | hihjkhjman    |        5675 | rtyui     |
+|         16 | hghhihjkhjman |      567995 | rastyui   |
++------------+---------------+-------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select customerID
+    -> from information
+    -> where phonenumber between 8001 and 5675;
+Empty set (0.02 sec)
+
+
+
+
+
+
+
+mysql> create database college;
+Query OK, 1 row affected (0.42 sec)
+
+mysql> use college;
+Database changed
+mysql> create table student( studentID is NOT NULL, LASTNAME varchar(255), FIRSTNAME varchar(255), GENDER enum('M', 'F'), CreatedAT timestamp);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'is NOT NULL, LASTNAME varchar(255), FIRSTNAME varchar(255), GENDER enum('M', 'F'' at line 1
+mysql> create table student( studentID int primary key , LASTNAME varchar(255), FIRSTNAME varchar(255), GENDER enum('M', 'F'), CreatedAT timestamp);
+Query OK, 0 rows affected (2.77 sec)
+
+mysql> insert into student( studentID, LASTNAME, FIRSTNAME, GENDER, CreatedAT)
+    -> VALUES( '1','khushi','sharma','F','2008-01-01 00:00:01');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into student( studentID, LASTNAME, FIRSTNAME, GENDER, CreatedAT)
+    -> VALUES( '2','devina','negi','F','2008-01-01 00:00:10');
+Query OK, 1 row affected (0.47 sec)
+
+mysql> insert into student( studentID, LASTNAME, FIRSTNAME, GENDER, CreatedAT)
+    -> VALUES( '3','Indu','rawat','F','2008-01-01 00:00:50');
+Query OK, 1 row affected (0.18 sec)
+
+mysql> insert into student( studentID, LASTNAME, FIRSTNAME, GENDER, CreatedAT)
+    -> VALUES( '4','sagar','kemwal','M','2008-01-01 10:00:10');
+Query OK, 1 row affected (0.17 sec)
+
+mysql> insert into student( studentID, LASTNAME, FIRSTNAME, GENDER, CreatedAT)
+    -> VALUES( '5','nitin','kemwal','M','2008-01-01 60:00:10');
+ERROR 1292 (22007): Incorrect datetime value: '2008-01-01 60:00:10' for column 'CreatedAT' at row 1
+mysql> insert into student( studentID, LASTNAME, FIRSTNAME, GENDER, CreatedAT)
+    -> VALUES( '5','nitin','kemwal','M','2008-01-01 40:00:10');
+ERROR 1292 (22007): Incorrect datetime value: '2008-01-01 40:00:10' for column 'CreatedAT' at row 1
+mysql> insert into student( studentID, LASTNAME, FIRSTNAME, GENDER, CreatedAT)
+    -> VALUES( '5','nitin','kemwal','M','2008-01-01 00:00:15');
+Query OK, 1 row affected (0.16 sec)
+
+mysql> create index idx
+    -> on student;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> create index idx
+    -> on student(LASTNAME);
+Query OK, 0 rows affected (0.91 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+mysql> select*from student;
++-----------+----------+-----------+--------+---------------------+
+| studentID | LASTNAME | FIRSTNAME | GENDER | CreatedAT           |
++-----------+----------+-----------+--------+---------------------+
+|         1 | khushi   | sharma    | F      | 2008-01-01 00:00:01 |
+|         2 | devina   | negi      | F      | 2008-01-01 00:00:10 |
+|         3 | Indu     | rawat     | F      | 2008-01-01 00:00:50 |
+|         4 | sagar    | kemwal    | M      | 2008-01-01 10:00:10 |
+|         5 | nitin    | kemwal    | M      | 2008-01-01 00:00:15 |
++-----------+----------+-----------+--------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> select case when gender='M'
+    -> then concat('Mr.',FIRSTNAME)
+    -> else concat('Ms.',LASTNAME)
+    -> end name
+    -> from student;
++-----------+
+| name      |
++-----------+
+| Ms.khushi |
+| Ms.devina |
+| Ms.Indu   |
+| Mr.kemwal |
+| Mr.kemwal |
++-----------+
+5 rows in set (0.00 sec)
+
+mysql> select*from student;
++-----------+----------+-----------+--------+---------------------+
+| studentID | LASTNAME | FIRSTNAME | GENDER | CreatedAT           |
++-----------+----------+-----------+--------+---------------------+
+|         1 | khushi   | sharma    | F      | 2008-01-01 00:00:01 |
+|         2 | devina   | negi      | F      | 2008-01-01 00:00:10 |
+|         3 | Indu     | rawat     | F      | 2008-01-01 00:00:50 |
+|         4 | sagar    | kemwal    | M      | 2008-01-01 10:00:10 |
+|         5 | nitin    | kemwal    | M      | 2008-01-01 00:00:15 |
++-----------+----------+-----------+--------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into student( studentID, LASTNAME, FIRSTNAME, GENDER, CreatedAT)
+    -> VALUES( '6','Aisha','bhardwaj','F','2008-01-01 20:00:10');
+Query OK, 1 row affected (0.19 sec)
+
+mysql> select*from student
+    -> WHERE FIRSTNAME LIKE 'a%';
+Empty set (0.00 sec)
+
+
+
+
+
+
+
+
+mysql> select*from student
+    -> where LASTNAME LIKE 'A%';
++-----------+----------+-----------+--------+---------------------+
+| studentID | LASTNAME | FIRSTNAME | GENDER | CreatedAT           |
++-----------+----------+-----------+--------+---------------------+
+|         6 | Aisha    | bhardwaj  | F      | 2008-01-01 20:00:10 |
++-----------+----------+-----------+--------+---------------------+
+1 row in set (0.14 sec)
+
+mysql> alter table student
+    -> add dob date;
+Query OK, 0 rows affected (0.84 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select*from student;
++-----------+----------+-----------+--------+---------------------+------+
+| studentID | LASTNAME | FIRSTNAME | GENDER | CreatedAT           | dob  |
++-----------+----------+-----------+--------+---------------------+------+
+|         1 | khushi   | sharma    | F      | 2008-01-01 00:00:01 | NULL |
+|         2 | devina   | negi      | F      | 2008-01-01 00:00:10 | NULL |
+|         3 | Indu     | rawat     | F      | 2008-01-01 00:00:50 | NULL |
+|         4 | sagar    | kemwal    | M      | 2008-01-01 10:00:10 | NULL |
+|         5 | nitin    | kemwal    | M      | 2008-01-01 00:00:15 | NULL |
+|         6 | Aisha    | bhardwaj  | F      | 2008-01-01 20:00:10 | NULL |
++-----------+----------+-----------+--------+---------------------+------+
+6 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+mysql> update student
+    -> set dob= 1998-07-27
+    -> where studentID=1;
+ERROR 1292 (22007): Incorrect date value: '1964' for column 'dob' at row 1
+mysql> update student
+    -> set dob= '1998-07-27'
+    -> where studentID=1;
+Query OK, 1 row affected (0.20 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student
+    -> set dob= 1998-07-20
+    -> where studentID=2;
+ERROR 1292 (22007): Incorrect date value: '1971' for column 'dob' at row 1
+mysql> update student
+    -> set dob= '1998-07-25'
+    -> where studentID=2;
+Query OK, 1 row affected (0.19 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>
+mysql>
+mysql> update student
+    -> set dob= '1978-07-20'
+    -> where studentID=3;
+Query OK, 1 row affected (0.16 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student
+    -> set dob= '1988-07-12'
+    -> where studentID=4;
+Query OK, 1 row affected (0.28 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student
+    -> set dob= '1298-07-25'
+    -> where studentID=5;
+Query OK, 1 row affected (0.19 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student
+    -> set dob= '1998-10-20'
+    -> where studentID=6;
+Query OK, 1 row affected (0.06 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select*from student;
++-----------+----------+-----------+--------+---------------------+------------+
+| studentID | LASTNAME | FIRSTNAME | GENDER | CreatedAT           | dob        |
++-----------+----------+-----------+--------+---------------------+------------+
+|         1 | khushi   | sharma    | F      | 2008-01-01 00:00:01 | 1998-07-27 |
+|         2 | devina   | negi      | F      | 2008-01-01 00:00:10 | 1998-07-25 |
+|         3 | Indu     | rawat     | F      | 2008-01-01 00:00:50 | 1978-07-20 |
+|         4 | sagar    | kemwal    | M      | 2008-01-01 10:00:10 | 1988-07-12 |
+|         5 | nitin    | kemwal    | M      | 2008-01-01 00:00:15 | 1298-07-25 |
+|         6 | Aisha    | bhardwaj  | F      | 2008-01-01 20:00:10 | 1998-10-20 |
++-----------+----------+-----------+--------+---------------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select( 2019- year(dob)) as 'age' from student;
++------+
+| age  |
++------+
+|   21 |
+|   21 |
+|   41 |
+|   31 |
+|  721 |
+|   21 |
++------+
+6 rows in set (0.09 sec)
+
+
+
+
+
+
+
+
+THANK YOU.
+
+
+
+
+
+
+
+
+
+
+
